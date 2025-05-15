@@ -1,0 +1,11 @@
+---
+- name: Configure system and deploy Orthanc
+  hosts: all
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - role: base_setup
+      tags: base_setup
+    - role: orthanc
+      tags: orthanc

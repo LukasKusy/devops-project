@@ -1,0 +1,35 @@
+---
+- name: Create Orthanc data directory
+  file:
+    path: /opt/orthanc
+    state: directory
+    owner: carebot
+    group: carebot
+    mode: 0755
+
+- name: Pull Orthanc Docker image
+  docker_image:
+    name: jodogne/orthanc
+    tag: latest
+    source: pull
+
+- name: Configure Orthanc
+  template:
+    src: orthanc.json.j2
+    dest: /opt/orthanc/orthanc.json
+    owner: carebot
+    group: carebot
+    mode: 0644
+
+- name: Ensure Orthanc container is running
+  docker_container:
+    name: orthanc
+    image: jodogne/orthanc
+    state: started
+    restart: yes
+    ports:
+      - "8042:8042"
+    volumes:
+      - /opt/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro
+    env:
+      ORTHANC__NAME: "Orthanc Server"

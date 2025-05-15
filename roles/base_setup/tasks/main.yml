@@ -1,0 +1,54 @@
+---
+- name: Install required system packages
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  loop:
+    - docker.io
+    - ncdu
+    - vim
+    - rsyslog
+    - htop
+    - docker-compose
+
+- name: Ensure Docker group exists
+  group:
+    name: docker
+    state: present
+
+- name: Create carebot user
+  user:
+    name: carebot
+    groups: docker
+    append: yes
+    shell: /bin/bash
+    system: no
+    create_home: yes
+
+- name: Configure Docker log rotation
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart docker
+
+- name: Ensure Docker service is running
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Ensure rsyslog is running
+  service:
+    name: rsyslog
+    state: started
+    enabled: yes
+
+- name: Ensure carebot can run Docker commands without sudo
+  lineinfile:
+    path: /etc/sudoers
+    line: "carebot ALL=(ALL) NOPASSWD: /usr/bin/docker"
+    validate: "visudo -cf %s"
