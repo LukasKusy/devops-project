@@ -1,7 +1,7 @@
 ---
 - name: Create Orthanc data directory
   file:
-    path: /opt/orthanc
+    path: "{{ orthanc_storage_dir }}"
     state: directory
     owner: carebot
     group: carebot
