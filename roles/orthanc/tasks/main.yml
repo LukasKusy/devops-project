@@ -18,7 +18,7 @@
 - name: Configure Orthanc
   template:
     src: orthanc.json.j2
-    dest: /opt/orthanc/orthanc.json
+    dest: "{{ orthanc_storage_dir }}/orthanc.json"
     owner: carebot
     group: carebot
     mode: 0644
@@ -31,9 +31,9 @@
     state: started
     restart: yes
     ports:
-      - "8042:8042"
+      - "{{ orthanc_http_port }}:8042"
+      - "{{ orthanc_dicom_port }}:4242"
     volumes:
-      - /opt/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro
+      - "{{ orthanc_storage_dir }}/orthanc.json:/etc/orthanc/orthanc.json:ro"
     env:
       ORTHANC__NAME: "Orthanc Server"
-  # Edge case: port 8042 může být obsazen jiným procesem

@@ -1,0 +1,8 @@
+orthanc_user: carebot
+orthanc_password: "ChangeMe123"
+orthanc_http_port: 8042
+orthanc_dicom_port: 4242
+orthanc_storage_dir: /opt/orthanc/data
+docker_log_max_size: "10m"
+docker_log_max_file: "3"
+# Edge case: port 8042 může být obsazen jiným procesem

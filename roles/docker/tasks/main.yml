@@ -8,7 +8,7 @@
     mode: 0644
   notify: restart docker
   # Edge case: pokud už je soubor přepsán jiným procesem, může dojít ke konfliktu
-  # Edge case: pokud není Docker spuštěn, změna se neprojeví do restartu služby
+  # Edge case: pokud není Docker spuštěn, změna se neprojeví do restartu služby - částečně řešeno v playbooku
 
 - name: Ensure Docker service is running
   service:

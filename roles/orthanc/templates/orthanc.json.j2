@@ -1,12 +1,11 @@
 {
   "AuthenticationEnabled": true,
   "RegisteredUsers": {
-    "carebot": "{{ orthanc_password | default('ChangeMe123!') }}"
+    "{{ orthanc_user }}": "{{ orthanc_password }}"
   },
-  "StorageDirectory": "/var/lib/orthanc/db",
-  "Plugins": [],
+  "StorageDirectory": "{{ orthanc_storage_dir }}",
   "DicomAet": "ORTHANC",
-  "DicomPort": 4242,
-  "HttpPort": 8042,
-  "RemoteAccessAllowed": true
+  "DicomPort": {{ orthanc_dicom_port }},
+  "HttpPort": {{ orthanc_http_port }},
+  "RemoteAccessAllowed": false
 }
