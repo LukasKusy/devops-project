@@ -6,12 +6,14 @@
     owner: carebot
     group: carebot
     mode: 0755
+  # Edge case: složka může být již vytvořena s jiným vlastníkem
 
 - name: Pull Orthanc Docker image
   docker_image:
     name: jodogne/orthanc
     tag: latest
     source: pull
+  # Edge case: přístup k Docker Hubu může být omezený
 
 - name: Configure Orthanc
   template:
@@ -20,6 +22,7 @@
     owner: carebot
     group: carebot
     mode: 0644
+  # Edge case: špatný formát JSON v šabloně by mohl způsobit selhání kontejneru
 
 - name: Ensure Orthanc container is running
   docker_container:
@@ -33,3 +36,4 @@
       - /opt/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro
     env:
       ORTHANC__NAME: "Orthanc Server"
+  # Edge case: port 8042 může být obsazen jiným procesem

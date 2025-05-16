@@ -1,0 +1,17 @@
+---
+- name: Configure Docker log rotation
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart docker
+  # Edge case: pokud už je soubor přepsán jiným procesem, může dojít ke konfliktu
+  # Edge case: pokud není Docker spuštěn, změna se neprojeví do restartu služby
+
+- name: Ensure Docker service is running
+  service:
+    name: docker
+    state: started
+    enabled: yes

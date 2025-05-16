@@ -5,7 +5,9 @@
   gather_facts: yes
 
   roles:
-    - role: base_setup
-      tags: base_setup
+    - role: common
+      tags: common
+    - role: docker
+      tags: docker
     - role: orthanc
       tags: orthanc

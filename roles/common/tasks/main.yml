@@ -11,6 +11,7 @@
     - rsyslog
     - htop
     - docker-compose
+  # Edge case: pokud by nefungoval apt update (např. kvůli špatnému připojení), došlo by k selhání.
 
 - name: Ensure Docker group exists
   group:
@@ -23,32 +24,19 @@
     groups: docker
     append: yes
     shell: /bin/bash
-    system: no
     create_home: yes
-
-- name: Configure Docker log rotation
-  template:
-    src: daemon.json.j2
-    dest: /etc/docker/daemon.json
-    owner: root
-    group: root
-    mode: 0644
-  notify: restart docker
-
-- name: Ensure Docker service is running
-  service:
-    name: docker
-    state: started
-    enabled: yes
+  # Edge case: uživatel může existovat
 
 - name: Ensure rsyslog is running
   service:
     name: rsyslog
     state: started
     enabled: yes
+  # Edge case: rsyslog nemusí být přítomný ve všech distribucích
 
 - name: Ensure carebot can run Docker commands without sudo
   lineinfile:
     path: /etc/sudoers
     line: "carebot ALL=(ALL) NOPASSWD: /usr/bin/docker"
     validate: "visudo -cf %s"
+  # Edge case: chybný zápis do sudoers může znepřístupnit sudo – validace tomu předchází
